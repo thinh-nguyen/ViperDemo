@@ -13,9 +13,14 @@ import UIKit
 class DocumentListInteractor: DocumentListInteractorInputProtocol {
 
     weak var presenter: DocumentListInteractorOutputProtocol?
+    var dataManager: DataManagerInputProtocol?
     
     func retrieveDocuments(query: DocQuery) {
-        
+        do {
+            try dataManager?.retrieveDocuments(payload: query.toJSON())
+        } catch {
+            presenter?.onError(errorMsg: "Error getting documents")
+        }
     }
 }
 
@@ -23,5 +28,15 @@ extension DocumentListInteractor: DataManagerOutputProtocol {
     
     func didRetrieveDocuments(documents: [DocumentModel]) {
         // Do cache Document if needed, create the UI Model and prepare them for data binding etc...
+        presenter?.didRetrieveDocuments(documents: documents)
+        
+        // for document in documents {
+        //            // SAVE to coredata
+        // }
     }
+    
+    func onError(errorMsg: String) {
+        presenter?.onError(errorMsg: errorMsg)
+    }
+    
 }

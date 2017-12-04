@@ -17,6 +17,13 @@ protocol DocumentListViewProtocol: class {
     /* NOTE that the component on the right must implement this protocol, in this case it's ViewController */
     /* Presenter -> ViewController */
     func showDocuments(with documentUIList: [DocumentUIModel])
+    
+    //Other functions available to the presenter
+    func onError(errorMsg: String)
+    
+//    func showLoading()
+//    
+//    func hideLoading()
 }
 
 //MARK: Presenter -
@@ -25,6 +32,8 @@ protocol DocumentListPresenterProtocol: class {
     
     /* View -> Presenter */ // STARTING POINT from View - viewDidLoad
     func presentDocuments()
+    
+    func onSelectDocument(selected: DocumentUIModel) // Navigate to detail screen
 }
 
 //MARK: Interactor -
@@ -39,24 +48,30 @@ protocol DocumentListInteractorOutputProtocol: class {
     
     /* Interactor -> Presenter */
     func didRetrieveDocuments(documents: [DocumentModel])
+    
+    //Other functions available to the Interactor
+    func onError(errorMsg: String)
 }
 
 //MARK: Wireframe - Rename ROUTER????
 protocol DocumentListWireframeProtocol: class {
+    
     /* Presenter -> Router */
     func routeToDocumentScreen(documentUIModel: DocumentUIModel)
 }
 
 //MARK: DataManager used by interactor to do network call or get from cache
 protocol DataManagerInputProtocol: class {
-    var documentsHandler:DataManagerOutputProtocol? { get set }
+    var interactor:DataManagerOutputProtocol? { get set }
 
     /* Interator -> DataManager */
     func retrieveDocuments(payload: [String:Any]) throws
 }
 
 protocol DataManagerOutputProtocol: class {
+    
     /* DataManager -> Interactor */  /* Interactor must implement this protocol */
     func didRetrieveDocuments(documents: [DocumentModel])
+    func onError(errorMsg: String)
 }
 

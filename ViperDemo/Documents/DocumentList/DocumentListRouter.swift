@@ -15,16 +15,21 @@ class DocumentListRouter: DocumentListWireframeProtocol {
 
     static func createModule() -> UIViewController {
         // Change to get view from storyboard if not using progammatic UI
-        let view = DocumentListViewController(nibName: nil, bundle: nil)
-        let interactor = DocumentListInteractor()
-        let router = DocumentListRouter()
-        let presenter = DocumentListPresenter(interface: view, interactor: interactor, router: router)
-
-        view.presenter = presenter
-        interactor.presenter = presenter
-        router.viewController = view
-
-        return view
+        let mainStoryboard = UIStoryboard(name: "Main", bundle: Bundle.main);
+        let navController = mainStoryboard.instantiateViewController(withIdentifier: "ViperNavigationController")
+        if let view = navController.childViewControllers.first as? DocumentListViewController {
+            let interactor = DocumentListInteractor()
+            let router = DocumentListRouter()
+            let presenter = DocumentListPresenter(view: view, interactor: interactor, router: router)
+            let dataManager: DataManagerInputProtocol = DocumentDataManager()
+            
+            view.presenter = presenter
+            interactor.presenter = presenter
+            interactor.dataManager = dataManager
+            router.viewController = view
+            dataManager.interactor = interactor
+        }
+        return navController
     }
     /* DocumentListWireframeProtocol */
     func routeToDocumentScreen(documentUIModel: DocumentUIModel) {
