@@ -18,7 +18,7 @@ class DocumentListRouter: DocumentListWireframeProtocol {
         let view = DocumentListViewController(nibName: nil, bundle: nil)
         let interactor = DocumentListInteractor()
         let router = DocumentListRouter()
-        let presenter = DocumentListPresenter(interface: view, interactor: interactor, router: router)
+        let presenter = DocumentListPresenter(view: view, interactor: interactor, router: router)
 
         view.presenter = presenter
         interactor.presenter = presenter
