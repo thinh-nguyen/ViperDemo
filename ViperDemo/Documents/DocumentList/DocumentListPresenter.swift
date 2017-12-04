@@ -15,8 +15,8 @@ class DocumentListPresenter: DocumentListPresenterProtocol, DocumentListInteract
     var interactor: DocumentListInteractorInputProtocol?
     private let router: DocumentListWireframeProtocol
 
-    init(interface: DocumentListViewProtocol, interactor: DocumentListInteractorInputProtocol?, router: DocumentListWireframeProtocol) {
-        self.view = interface
+    init(view: DocumentListViewProtocol, interactor: DocumentListInteractorInputProtocol?, router: DocumentListWireframeProtocol) {
+        self.view = view
         self.interactor = interactor
         self.router = router
     }
